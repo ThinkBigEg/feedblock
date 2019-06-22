@@ -33,7 +33,10 @@ const App = {
     //Create session
     createdSession: async function(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes) {
         const { createdSession } = this.meta.methods;
-        await createdSession(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes).send({ from: this.account });
+        var contractAddress, c;
+        contractAddress = await createdSession(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes).send({ from: this.account });
+        alert("Your Session Address Is " + contractAddress.events.sessionnCreated.address);
+
     },
 
     getSession: async function() {
