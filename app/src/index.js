@@ -1,7 +1,5 @@
 import Web3 from "web3";
 import OrganizationArtifact from "../../build/contracts/Organization.json";
-import SessionArtifact from "../../build/contracts/Session.json";
-var SessionAdress;
 var SessionContract;
 const App = {
     web3: null,
@@ -30,33 +28,12 @@ const App = {
     },
 
     takefeeback: function(_session) {
-        _session.take_feedback('0xa8ff46045fa2c6a0af361819b62126e1b0ec8909', 5, function(error, result) {
-            if (!error) {
-                console.log(result + " 123");
-            } else
-                console.error(error);
-        });
+
     },
     //Create session
     createdSession: async function(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes) {
         const { createdSession } = this.meta.methods;
-        SessionAdress = await createdSession(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes).send({ from: this.account });
-
-        //-----Call Event--------
-        var event = await SessionAdress.sessionnCreated({ from: this.account });
-        event.watch(function(err, result) {
-            if (err) {
-                console.log(err)
-                return;
-            }
-            console.log(result.args.sessionAddress);
-        });
-        //-----Initialize contract session after getting the address and have the abi =  SessionArtificate.abi--------
-        var abi = web3.eth.contract(SessionArtifact.abi);
-        SessionContract = abi.at(SessionAdress);
-        // Call Contract methods to test it
-        const { take_feedback } = SessionContract.methods
-        await take_feedback('0xa8ff46045fa2c6a0af361819b62126e1b0ec8909', 5).send({ from: this.account });
+        await createdSession(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes).send({ from: this.account });
     },
 
     getSession: async function() {
@@ -99,9 +76,8 @@ const App = {
     take_feedback: async function() {
         var _sessionName = $('#feedback_session_name').val();
         var _feedback = $('#feedback').val();
-        //Need To call Child Contract method
-        const { take_feedback } = await SessionContract.methods();
-        await take_feedback(_sessionName, _feedback).send({ from: this.account });
+        const { sessionTakeFeedback } = this.meta.methods;
+        await sessionTakeFeedback('0xa8ff46045fa2c6a0af361819b62126e1b0ec8909', 5).send({ from: this.account });
 
     },
     //See Result
