@@ -34,16 +34,14 @@ contract Session {
     }
    
     function Time() public view returns (bool){
-       return (now >=  startTime  && now <= endTime);          
+       return (now >=  startTime  && now <= endTime && startTime < endTime);          
      }
 
     modifier checkTime(){
         require(Time());
         _;
       }
-      function test() public pure returns(bool) {
-             return true;
-      }
+    
     function take_feedback(address _voter,uint8 _feedback)  public checkTime  {
          require(attendes_feedback[_voter] != 0);
           attendes_feedback[_voter] = _feedback;

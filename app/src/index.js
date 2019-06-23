@@ -1,6 +1,5 @@
 import Web3 from "web3";
 import OrganizationArtifact from "../../build/contracts/Organization.json";
-var SessionContract;
 const App = {
     web3: null,
     account: null,
@@ -27,9 +26,7 @@ const App = {
         }
     },
 
-    takefeeback: function(_session) {
 
-    },
     //Create session
     createdSession: async function(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes) {
         const { createdSession } = this.meta.methods;
@@ -38,7 +35,30 @@ const App = {
         alert("Your Session Address Is " + contractAddress.events.sessionnCreated.address);
 
     },
-
+    CreateOrganization: async function() {
+        var OrganizationName = $('#create_Organization_name').val();
+        var discription = $('#Organization_discription').val();
+        const { CreateOrganization } = this.meta.methods;
+        var address;
+        console.log(OrganizationName);
+        console.log(discription);
+        address = await CreateOrganization(OrganizationName, discription).send({ from: this.account });
+        console.log(address);
+        $(".create-organization").addClass("invisible");
+        $("create-sessions").removeClass("invisible");
+    },
+    GoToOrganization: async function() {
+        var OrganizationAddress = $('create_Organization_Address').val();
+        const { GoToOrganization } = this.meta.methods;
+        var flag;
+        flag = await GoToOrganization().call();
+        if (flag) {
+            $(".create-organization").addClass("invisible");
+            $("create-sessions").removeClass("invisible");
+        } else {
+            alert("error");
+        }
+    },
     getSession: async function() {
         var address;
         const { getAddress } = this.meta.methods;
@@ -86,10 +106,10 @@ const App = {
     //See Result
     getResult: async function() {
         //var _sessionName = $('#see_session_name').val();
-        //let result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         var result;
         const { sessionSeeResult } = this.meta.methods;
         result = await sessionSeeResult().call();
+        console.log(result);
         return result;
     },
     drawChart: function(result) {
