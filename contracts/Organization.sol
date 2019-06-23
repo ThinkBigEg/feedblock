@@ -30,11 +30,10 @@ contract Organization {
      //Session Contract Methods
      function sessionTakeFeedback(address _voter,uint8 _feedback) public{
        session.take_feedback(_voter,_feedback);
-       //session.test();
-    /*  uint x = 1;
-     uint y = 2;
-     uint z  = x+y+2*4; */
+     
      }
-  
+   function sessionSeeResult() public view returns(int[] memory) {
+        return  session.seeResult();
+   }
 }
 

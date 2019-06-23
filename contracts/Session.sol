@@ -44,8 +44,8 @@ contract Session {
       function test() public pure returns(bool) {
              return true;
       }
-    function take_feedback(address _voter,uint8 _feedback)  public  {
-         // require(attendes_feedback[_voter] != 0);
+    function take_feedback(address _voter,uint8 _feedback)  public checkTime  {
+         require(attendes_feedback[_voter] != 0);
           attendes_feedback[_voter] = _feedback;
           result[_feedback]++;
     }

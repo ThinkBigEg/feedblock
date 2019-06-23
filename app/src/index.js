@@ -85,14 +85,16 @@ const App = {
     },
     //See Result
     getResult: async function() {
-        var _sessionName = $('#see_session_name').val();
-        let result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        const { seeResult } = this.meta.methods;
-        result = await seeResult(_sessionName).call();
+        //var _sessionName = $('#see_session_name').val();
+        //let result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        var result;
+        const { sessionSeeResult } = this.meta.methods;
+        result = await sessionSeeResult().call();
         return result;
     },
     drawChart: function(result) {
         console.log("see = " + result);
+        var numOfVoters = result[0] + result[1] + result[1] + result[3] + result[4];
         var colors = ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d'];
         var donutOptions = {
             cutoutPercentage: 85,
@@ -104,7 +106,7 @@ const App = {
             datasets: [{
                 backgroundColor: colors.slice(0, 5),
                 borderWidth: 0,
-                data: [result[0], result[1], result[2], result[3], result[4]]
+                data: [(result[0] / numOfVoters) * 100, (result[1] / numOfVoters) * 100, (result[2] / numOfVoters) * 100, (result[3] / numOfVoters) * 100, (result[4] / numOfVoters) * 100]
             }]
         };
 
