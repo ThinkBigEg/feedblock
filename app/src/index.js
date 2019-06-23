@@ -80,7 +80,7 @@ const App = {
         var _sessionName = $('#feedback_session_name').val();
         var _feedback = $('#feedback').val();
         const { sessionTakeFeedback } = this.meta.methods;
-        await sessionTakeFeedback('0xa8ff46045fa2c6a0af361819b62126e1b0ec8909', 5).send({ from: this.account });
+        await sessionTakeFeedback(_sessionName, _feedback).send({ from: this.account });
 
     },
     //See Result

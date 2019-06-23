@@ -1,3 +1,4 @@
+// Session.deployed().then(function(instance){ return instance.take_feedback('0x0fce0e522a2a18ee1e0fbf913e12483aec3f8404',8);});
 pragma solidity 0.5.0;
 import "./Session.sol";
 contract Organization {
@@ -29,6 +30,10 @@ contract Organization {
      //Session Contract Methods
      function sessionTakeFeedback(address _voter,uint8 _feedback) public{
        session.take_feedback(_voter,_feedback);
+       //session.test();
+    /*  uint x = 1;
+     uint y = 2;
+     uint z  = x+y+2*4; */
      }
   
 }
