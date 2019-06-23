@@ -48,10 +48,11 @@ const App = {
         $("create-sessions").removeClass("invisible");
     },
     GoToOrganization: async function() {
-        var OrganizationAddress = $('create_Organization_Address').val();
+        var OrganizationAddress = $('#create_Organization_Address').val();
         const { GoToOrganization } = this.meta.methods;
         var flag;
-        flag = await GoToOrganization().call();
+        flag = await GoToOrganization(OrganizationAddress).call();
+        console.log(flag);
         if (flag) {
             $(".create-organization").addClass("invisible");
             $("create-sessions").removeClass("invisible");
