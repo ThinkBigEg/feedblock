@@ -12,6 +12,7 @@ contract Session {
 
       int[] result; 
       mapping(address => int) public attendes_feedback; //institution boardMembers
+
       modifier onTime(uint _startTime){
             require(now < _startTime);
             _;

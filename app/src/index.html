@@ -30,7 +30,7 @@
 
 
             <div class="form-group">
-                <button type="button" onclick="return App.CreateOrganization()" class="btn btn-primary">Generate Key</button>
+                <button type="button" onclick="return App.CreateOrganization()" class="btn btn-primary pull-right">Generate Key</button>
             </div>
             <!--Organization Address-->
             <div class="form-group">
@@ -138,8 +138,13 @@
 
                             <!--Session Name-->
                             <div class="form-group">
-                                <label for="feedback_session_name">session name</label>
+                                <label for="feedback_session_name">session address</label>
                                 <input type="text" class="form-control" required id="feedback_session_name">
+                            </div>
+                            <!--Session Name-->
+                            <div class="form-group">
+                                <label for="feedback_session_voter">voter address</label>
+                                <input type="text" class="form-control" required id="feedback_session_voter">
                             </div>
 
                             <!--Rate-->
@@ -178,7 +183,7 @@
 
                             <!--Session Name-->
                             <div class="form-group">
-                                <label for="see_session_name">voter address</label>
+                                <label for="see_session_name">Session Address</label>
                                 <input type="text" class="form-control" required id="see_session_name">
                             </div>
                             <!--Submit button-->

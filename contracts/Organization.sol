@@ -3,33 +3,55 @@ pragma solidity 0.5.0;
 import "./Session.sol";
 import "./OrganizationCreator.sol";
 
+
 contract Organization {
+  
+    address creator;
+    string organizationName;
+    string organizationDiscription;
+    Session session;
+    OrganizationCreator oragnization;
+    mapping (address => uint) ISsession;
+ 
+   constructor(string  memory _organizationName, string memory _organizationDiscription) public{
+        organizationName = _organizationName;
+        organizationDiscription = _organizationDiscription;
+      }
 
-     address creator;
-     string organizationName;
-     string organizationDiscription;
-      Session session;
-     OrganizationCreator oragnization; 
-     
- constructor(string memory _organizationName,string memory _organizationDiscription) public{
+    //create Organization
+   function CreateOrganization(string  memory _organizationName, string memory _organizationDiscription) public returns(address) {
+         address childAddress = clone(address(this));
+         Organization child = Organization(childAddress);
+         child.setcreator(address(this));
+         setOrganizationInfo(_organizationName,_organizationDiscription);
+         return address(child);
+   }
+   
+  function setOrganizationInfo(string  memory _organizationName, string memory _organizationDiscription)  public  {
        organizationName = _organizationName;
-       organizationDiscription = _organizationDiscription;
-     }
+        organizationDiscription = _organizationDiscription;
+  }
+   function setcreator(address addr) public {
+         creator = addr;
+   }
 
-     event sessionnCreated(string name,address sessionAddress ,address creator);
+   function clone(address a) public returns(address)  {
+      address retval;
+      assembly{
+         mstore(0x0, or (0x5880730000000000000000000000000000000000000000803b80938091923cF3 ,mul(a,0x1000000000000000000)))
+         retval := create(0,0, 32)
+      }
+      return retval;
+   }
+      
+    event sessionnCreated(string name,address sessionAddress ,address creator);
      
-       modifier onlyCreator(){
+    modifier onlyCreator(){
         require(msg.sender == creator);
         _;
     } 
     
       
-      function CreateOrganization(string memory _organizationName,string memory _organizationDiscription)  public returns (address) {
-        return oragnization.Create(_organizationName,_organizationDiscription);
-      }
-      function GoToOrganization(address _organizationAddress) view public returns (bool) {
-        return oragnization.GoTo(_organizationAddress);
-      }
 
 
      //construct Session Contract
@@ -43,17 +65,20 @@ contract Organization {
      ) public   returns(address) {
         
         session = new Session(_sessionName , _description , _startTime , _endTime, _lecturer,_attendes );
+        session = Session(address(session));
+        ISsession[address(session)] = 7;
         emit sessionnCreated(_sessionName,address(session),creator);
         return address(session);
      }
      
      //Session Contract Methods
-     function sessionTakeFeedback(address _voter,uint8 _feedback) public{
-       session.take_feedback(_voter,_feedback);
-     
+     function sessionTakeFeedback(address _session,address _voter,uint8 _feedback) public{
+        require(ISsession[_session] == 7);
+        Session(address(session)).take_feedback(_voter,_feedback);  
      }
-   function sessionSeeResult() public view returns(int[] memory) {
-        return  session.seeResult();
+   function sessionSeeResult(address _session) public view returns(int[] memory) {
+        require(ISsession[_session] == 7);
+        return   Session(address(session)).seeResult();
    }
 }
 

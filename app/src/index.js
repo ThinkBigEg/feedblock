@@ -27,14 +27,7 @@ const App = {
     },
 
 
-    //Create session
-    createdSession: async function(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes) {
-        const { createdSession } = this.meta.methods;
-        var contractAddress, c;
-        contractAddress = await createdSession(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes).send({ from: this.account });
-        alert("Your Session Address Is " + contractAddress.events.sessionnCreated.address);
 
-    },
     CreateOrganization: async function() {
         var OrganizationName = $('#create_Organization_name').val();
         var discription = $('#Organization_discription').val();
@@ -42,10 +35,11 @@ const App = {
         var address;
         console.log(OrganizationName);
         console.log(discription);
-        address = await CreateOrganization(OrganizationName, discription).send({ from: this.account });
-        console.log(address);
-        $(".create-organization").addClass("invisible");
-        $("create-sessions").removeClass("invisible");
+        await CreateOrganization(OrganizationName, discription).send({ from: this.account });
+        //console.log(address.events.sessionnCreated.returnValues.sessionAddress);
+        //alert("Your Organization Address" + address.events.sessionnCreated.returnValues.sessionAddress);
+        $(".create-organization").remove();
+        $(".create-sessions").removeClass("invisible");
     },
     GoToOrganization: async function() {
         var OrganizationAddress = $('#create_Organization_Address').val();
@@ -55,16 +49,19 @@ const App = {
         console.log(flag);
         if (flag) {
             $(".create-organization").addClass("invisible");
-            $("create-sessions").removeClass("invisible");
+            $(".create-sessions").removeClass("invisible");
         } else {
             alert("error");
         }
     },
-    getSession: async function() {
-        var address;
-        const { getAddress } = this.meta.methods;
-        address = await getAddress().call();
-        SessionAdress = address;
+    //Create session
+    createdSession: async function(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes) {
+        const { createdSession } = this.meta.methods;
+        var contractAddress, c;
+        contractAddress = await createdSession(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes).send({ from: this.account });
+        console.log(contractAddress.events);
+        alert("Your Session Address Is " + contractAddress.events.sessionnCreated.returnValues.sessionAddress);
+
     },
 
     //Events Time
@@ -99,17 +96,18 @@ const App = {
     //Take Feedback
     take_feedback: async function() {
         var _sessionName = $('#feedback_session_name').val();
+        var _voter = $('#feedback_session_voter').val();
         var _feedback = $('#feedback').val();
         const { sessionTakeFeedback } = this.meta.methods;
-        await sessionTakeFeedback(_sessionName, _feedback).send({ from: this.account });
+        await sessionTakeFeedback(_sessionName, _voter, _feedback).send({ from: this.account });
 
     },
     //See Result
     getResult: async function() {
-        //var _sessionName = $('#see_session_name').val();
+        var _sessionName = $('#see_session_name').val();
         var result;
         const { sessionSeeResult } = this.meta.methods;
-        result = await sessionSeeResult().call();
+        result = await sessionSeeResult(_sessionName).call();
         console.log(result);
         return result;
     },

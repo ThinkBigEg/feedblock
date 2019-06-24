@@ -11,7 +11,7 @@ contract TestOrganizationCreation{
 
         Assert.equal(
             meta.Create("ThinkBig","Startup"),
-            address(0),
+            address(this),
             "Create should return a valid Organization address "
         );
     }
@@ -19,12 +19,12 @@ contract TestOrganizationCreation{
     function testGotTo() public {
         OrganizationCreator meta = new OrganizationCreator();
 
-        bool expected = false;
+        bool expected = true;
 
         Assert.equal(
             meta.GoTo(address(this)),
             expected,
-            "Address shouldn't be exist"
+            "Address should exist"
         );
     }
 }
