@@ -1,7 +1,6 @@
 // Session.deployed().then(function(instance){ return instance.take_feedback('0x0fce0e522a2a18ee1e0fbf913e12483aec3f8404',8);});
 pragma solidity 0.5.0;
 import "./Session.sol";
-import "./OrganizationCreator.sol";
 
 
 contract Organization {
@@ -10,9 +9,9 @@ contract Organization {
     string organizationName;
     string organizationDiscription;
     Session session;
-    OrganizationCreator oragnization;
     mapping (address => uint) ISsession;
- 
+    mapping (address => uint) organizations;
+   
    constructor(string  memory _organizationName, string memory _organizationDiscription) public{
         organizationName = _organizationName;
         organizationDiscription = _organizationDiscription;
@@ -23,8 +22,16 @@ contract Organization {
          address childAddress = clone(address(this));
          Organization child = Organization(childAddress);
          child.setcreator(address(this));
+         organizations[ address(child)] = 7;
          setOrganizationInfo(_organizationName,_organizationDiscription);
          return address(child);
+   }
+   function GoToOrganization(address _organization) public view   returns(bool) {
+            if (organizations[_organization] == 7) {
+               return true;
+            } else {
+               return false;
+            }
    }
    
   function setOrganizationInfo(string  memory _organizationName, string memory _organizationDiscription)  public  {
