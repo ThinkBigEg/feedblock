@@ -35,9 +35,10 @@ const App = {
         var address;
         console.log(OrganizationName);
         console.log(discription);
-        await CreateOrganization(OrganizationName, discription).send({ from: this.account });
-        //console.log(address.events.sessionnCreated.returnValues.sessionAddress);
-        //alert("Your Organization Address" + address.events.sessionnCreated.returnValues.sessionAddress);
+        address = await CreateOrganization(OrganizationName, discription).send({ from: this.account });
+        console.log(address);
+        alert("Your Organization address = " + address.events.organizationCreated.returnValues.organizationAddress)
+            //alert("Your Organization Address" + address.events.sessionnCreated.returnValues.sessionAddress);
         $(".create-organization").remove();
         $(".create-sessions").removeClass("invisible");
     },
@@ -48,7 +49,7 @@ const App = {
         flag = await GoToOrganization(OrganizationAddress).call();
         console.log(flag);
         if (flag) {
-            $(".create-organization").addClass("invisible");
+            $(".create-organization").remove();
             $(".create-sessions").removeClass("invisible");
         } else {
             alert("error");
@@ -59,7 +60,7 @@ const App = {
         const { createdSession } = this.meta.methods;
         var contractAddress, c;
         contractAddress = await createdSession(_sessionName, _description, _startTime, _endTime, _lecturer, _attendes).send({ from: this.account });
-        console.log(contractAddress.events);
+        console.log(contractAddress);
         alert("Your Session Address Is " + contractAddress.events.sessionnCreated.returnValues.sessionAddress);
 
     },

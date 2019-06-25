@@ -10,7 +10,7 @@ contract Session {
       address[] lecturer;
       address[] attendes; 
 
-      int[] result; 
+      uint8[5]  result; 
       mapping(address => int) public attendes_feedback; //institution boardMembers
 
       modifier onTime(uint _startTime){
@@ -43,13 +43,16 @@ contract Session {
         _;
       }
     
-    function take_feedback(address _voter,uint8 _feedback)  public checkTime  {
-         require(attendes_feedback[_voter] != 0);
-          attendes_feedback[_voter] = _feedback;
-          result[_feedback]++;
+    function take_feedback(address _voter,uint8 _feedback)  public   {
+           require(attendes_feedback[_voter] != 0);
+          attendes_feedback[_voter] = _feedback; 
+          increase_feeback(_feedback);
+
     }
- 
-  function seeResult() public view returns(int[] memory){
+     function increase_feeback(uint8 _feedback)  private  {
+              result[_feedback] = result[_feedback] + 1; 
+      } 
+  function seeResult() public view returns(uint8[5] memory){
           return result;
   }
 }

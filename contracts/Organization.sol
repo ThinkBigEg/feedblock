@@ -24,6 +24,7 @@ contract Organization {
          child.setcreator(address(this));
          organizations[ address(child)] = 7;
          setOrganizationInfo(_organizationName,_organizationDiscription);
+         emit organizationCreated(_organizationName,_organizationDiscription,address(child),address(this));
          return address(child);
    }
    function GoToOrganization(address _organization) public view   returns(bool) {
@@ -52,15 +53,16 @@ contract Organization {
    }
       
     event sessionnCreated(string name,address sessionAddress ,address creator);
-     
+    event organizationCreated(string name,string discription,address organizationAddress,address creatorAddress); 
     modifier onlyCreator(){
         require(msg.sender == creator);
         _;
     } 
+    modifier onlySession(address _session){
+        require(ISsession[_session] == 7);
+        _;
+    } 
     
-      
-
-
      //construct Session Contract
      function createdSession(
       string memory _sessionName,
@@ -79,12 +81,11 @@ contract Organization {
      }
      
      //Session Contract Methods
-     function sessionTakeFeedback(address _session,address _voter,uint8 _feedback) public{
-        require(ISsession[_session] == 7);
-        Session(address(session)).take_feedback(_voter,_feedback);  
+     function sessionTakeFeedback(address _session,address _voter,uint8 _feedback) public onlySession(_session){
+        Session targetSession = Session(_session);
+        targetSession.take_feedback(_voter,_feedback);  
      }
-   function sessionSeeResult(address _session) public view returns(int[] memory) {
-        require(ISsession[_session] == 7);
+   function sessionSeeResult(address _session) public view onlySession(_session) returns(uint8[5] memory) {
         return   Session(address(session)).seeResult();
    }
 }
