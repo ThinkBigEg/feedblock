@@ -8,50 +8,116 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 </head>
+<style>
+    .app {
+        color: #fff;
+        text-align: center;
+        background-color: #33ccff6b;
+        height: -webkit-fill-available;
+        height: -o-fill-availble;
+        height: -moz-available;
+        width: fill-available
+    }
+    
+    .app .title {
+        color: #000;
+    }
+    
+    .app .title h1 {
+        font-size: 4.5rem;
+    }
+    
+    .app .title .powerd-by {
+        color: #fff;
+        font-size: 16px;
+        margin-top: -21px
+    }
+    
+    .app .create-organization form .form-group {}
+    
+    .app .create-organization form .form-group input {
+        width: 504px;
+        height: 46px;
+        margin: auto
+    }
+    
+    .app .create-organization form .form-group .have-my-link {
+        margin-right: 230px;
+        text-decoration: underline
+    }
+    
+    .app .create-organization form .session-btns button {
+        height: 73px;
+        margin-right: 56px;
+        margin-left: 51px
+    }
+    
+    footer {
+        text-align: center;
+        background-color: #66CCCC
+    }
+    
+    .clearfix {
+        clear: both
+    }
+</style>
 
 <body>
 
-    <div class="create-organization text-centre">
-        <h1> Create Organization</h1>
-        <form class="text-capitalize p-2">
+    <div class="app p-5">
+        <div class="title">
+            <h1><span style="color:#66FFFF">Feed</span>Block</h1>
+            <h6 class="powerd-by ml-5 pl-5">&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; powered by ThinkBig!
+            </h6>
 
-            <!--Organization Name-->
-            <div class="form-group">
-                <label for="create_Organization_name">Organization name</label>
-                <input type="text" required class="form-control" id="create_Organization_name">
-            </div>
+        </div>
+        <div class="create-organization text-centre mt-5">
+            <h1 class="m-5"> Create Your Organization</h1>
+            <form class="text-capitalize p-2">
 
-            <!--Organization Discription-->
-            <div class="form-group">
-                <label for="Organization_discription">Organization discription</label>
-                <input type="text" required class="form-control" id="Organization_discription">
-            </div>
+                <!--Organization Name-->
+                <div class="form-group">
+                    <input type="text" required class="form-control" id="create_Organization_name" placeholder="Organization Name">
+                </div>
 
+                <!--Organization Discription-->
+                <div class="form-group">
+                    <input type="text" required class="form-control" id="Organization_discription" placeholder="Organization Discription">
+                </div>
+                <!--Generate Key-->
+                <div class="form-group">
+                    <a href="#" class="have-my-link">I Have My Address</a>
+                    <button type="button" onclick="return App.CreateOrganization()" class="btn btn-primary">Generate Key</button>
+                </div>
+                <!--Get & See Feedback Results-->
+                <div class="form-group session-btns">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#seeFeedback">
+                                Get Session Feedback <br> Results
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeFeedback">
+                        Give Your Feedback For <br>A Session                            
+                    </button>
+                </div>
+            </form>
+        </div>
 
-
-            <div class="form-group">
-                <button type="button" onclick="return App.CreateOrganization()" class="btn btn-primary pull-right">Generate Key</button>
-            </div>
-            <!--Organization Address-->
-            <div class="form-group">
-                <label for="create_Organization_Address">Organization Address</label>
-                <input type="text" required class="form-control" id="create_Organization_Address">
-            </div>
-            <div class="form-group">
-                <button type="button" onclick="return App.GoToOrganization()" class="btn btn-primary">Go To My Organization</button>
-            </div>
-
-        </form>
     </div>
 
-    <!--Session Section-->
+    <footer>
+        &copy;Copyright <a href="http://www.think-big.solutions" target="tab">ThinkBig!</a> - All Rights Reserved
+    </footer>
 
-    <div class="create-sessions invisible">
+
+
+
+
+    <!--Create Session-->
+    <div class="create-sessions" style="display:none">
 
         <!-- Create Event Button -->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createSession">
-        Create Events Form 
-    </button>
+            Create Events Form 
+        </button>
 
         <!-- Create Event Modal -->
         <div class="modal fade" id="createSession" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="createSessionCenterTitle" aria-hidden="true">
@@ -118,101 +184,111 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!--/Create Session-->
 
-        <!-- Make  Feedback Button -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeFeedback">
-        Feedback form
-    </button>
 
-        <!-- Make  Feedback Modal -->
-        <div class="modal fade" id="makeFeedback" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        Tell Us Your Opinion
-                    </div>
-                    <div class="modal-body">
 
-                        <!--Start Form-->
-                        <form class="text-capitalize p-2">
 
-                            <!--Session Name-->
-                            <div class="form-group">
-                                <label for="feedback_session_name">session address</label>
-                                <input type="text" class="form-control" required id="feedback_session_name">
-                            </div>
-                            <!--Session Name-->
-                            <div class="form-group">
-                                <label for="feedback_session_voter">voter address</label>
-                                <input type="text" class="form-control" required id="feedback_session_voter">
-                            </div>
 
-                            <!--Rate-->
-                            <div class="form-group">
-                                <label for="feedback">how much do you like us?</label> <br>
-                                <label for="feedback"> dislike </label> <input type="range" class="custom-range m-3" min="0" max="5" id="feedback"> <label for="feedback"> like  </label>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" onclick="App.take_feedback()" id="feedback_btn" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                        <!--End Form-->
-                    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <!--MODALS-->
+
+    <!--See Result Modal -->
+    <div class="modal fade" id="seeFeedback" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    See Result
                 </div>
-            </div>
-        </div>
+                <div class="modal-body">
 
+                    <!--Start Form-->
+                    <form class="text-capitalize p-2">
 
-        <!--See Result Button-->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#seeFeedback">
-     See Result Form
-    </button>
-
-        <!--See Result Modal -->
-        <div class="modal fade" id="seeFeedback" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        See Result
-                    </div>
-                    <div class="modal-body">
-
-                        <!--Start Form-->
-                        <form class="text-capitalize p-2">
-
-                            <!--Session Name-->
-                            <div class="form-group">
-                                <label for="see_session_name">Session Address</label>
-                                <input type="text" class="form-control" required id="see_session_name">
-                            </div>
-                            <!--Submit button-->
-                            <div class="form-group">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" onclick="App.showResult()" id="feedback_btn" class="btn btn-primary">Submit</button>
-                            </div>
-                            <!--Show Chart-->
-                            <div class="container">
-                                <div class="row py-2">
-                                    <div class="col-md-12 py-1">
-                                        <div class="card" style="border:none">
-                                            <div class="card-body">
-                                                <canvas id="chDonut1"></canvas>
-                                            </div>
+                        <!--Session Name-->
+                        <div class="form-group">
+                            <label for="see_session_name">Session Address</label>
+                            <input type="text" class="form-control" required id="see_session_name">
+                        </div>
+                        <!--Submit button-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="App.showResult()" id="feedback_btn" class="btn btn-primary">Submit</button>
+                        </div>
+                        <!--Show Chart-->
+                        <div class="container">
+                            <div class="row py-2">
+                                <div class="col-md-12 py-1">
+                                    <div class="card" style="border:none">
+                                        <div class="card-body">
+                                            <canvas id="chDonut1"></canvas>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                        </form>
-                        <!--End Form-->
-                    </div>
+                    </form>
+                    <!--End Form-->
                 </div>
             </div>
         </div>
-
-
     </div>
+    </div>
+    <!--Give Feedback Modal-->
+    <!-- Make  Feedback Modal -->
+    <div class="modal fade" id="makeFeedback" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Tell Us Your Opinion
+                </div>
+                <div class="modal-body">
+
+                    <!--Start Form-->
+                    <form class="text-capitalize p-2">
+
+                        <!--Session Name-->
+                        <div class="form-group">
+                            <label for="feedback_session_name">session address</label>
+                            <input type="text" class="form-control" required id="feedback_session_name">
+                        </div>
+                        <!--Session Name-->
+                        <div class="form-group">
+                            <label for="feedback_session_voter">voter address</label>
+                            <input type="text" class="form-control" required id="feedback_session_voter">
+                        </div>
+
+                        <!--Rate-->
+                        <div class="form-group">
+                            <label for="feedback">how much do you like us?</label> <br>
+                            <label for="feedback"> dislike </label> <input type="range" class="custom-range m-3" min="0" max="5" id="feedback"> <label for="feedback"> like  </label>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="App.take_feedback()" id="feedback_btn" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                    <!--End Form-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/MODALS-->
+
+
+
     <!--Scripts-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

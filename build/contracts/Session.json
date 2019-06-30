@@ -5427,12 +5427,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x4D78565d56Ec7b44b28E81Ed68D8E962552F5e7c",
-      "transactionHash": "0x896faeed8bf3b1e347f84db14d4b59ed16ae126ade543a3c8460e018a5e5c58d"
+      "address": "0xBD5065d05e8581fFc55fA794c416816EeE47Ba35",
+      "transactionHash": "0x37d575c8a1077ad015ec495d5f9c795a0a2ddf5ffa6e6848ad1157f158d86d51"
     }
   },
   "schemaVersion": "3.0.8",
-  "updatedAt": "2019-06-26T15:30:02.970Z",
+  "updatedAt": "2019-06-30T12:16:01.231Z",
   "devdoc": {
     "methods": {}
   },

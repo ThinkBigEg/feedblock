@@ -40,7 +40,8 @@ const App = {
         alert("Your Organization address = " + address.events.organizationCreated.returnValues.organizationAddress)
             //alert("Your Organization Address" + address.events.sessionnCreated.returnValues.sessionAddress);
         $(".create-organization").remove();
-        $(".create-sessions").removeClass("invisible");
+
+        $(".create-sessions").css({ 'display': 'block' });
     },
     GoToOrganization: async function() {
         var OrganizationAddress = $('#create_Organization_Address').val();
@@ -50,7 +51,7 @@ const App = {
         console.log(flag);
         if (flag) {
             $(".create-organization").remove();
-            $(".create-sessions").removeClass("invisible");
+            $(".create-sessions").css({ 'display': 'block' });
         } else {
             alert("error");
         }
