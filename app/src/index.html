@@ -54,6 +54,14 @@
         margin-left: 51px
     }
     
+    .create-sessions {
+        text-align: left
+    }
+    
+    body>div.app.p-5>div.create-sessions>form>div.form-group.form-group-btn {
+        text-align: right
+    }
+    
     footer {
         text-align: center;
         background-color: #66CCCC
@@ -154,7 +162,7 @@
                     <input type="text" class="form-control" required id="attendes">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group form-group-btn">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" onclick="return App.onSubmit()" class="btn btn-primary">Submit</button>
                 </div>
