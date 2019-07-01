@@ -43,7 +43,9 @@
     
     .app .create-organization form .form-group .have-my-link {
         margin-right: 230px;
-        text-decoration: underline
+        text-decoration: underline;
+        cursor: pointer;
+        color: #4181f6
     }
     
     .app .create-organization form .session-btns button {
@@ -57,6 +59,8 @@
         background-color: #66CCCC
     }
     
+    #modal_address .form-group input {}
+    
     .clearfix {
         clear: both
     }
@@ -65,12 +69,14 @@
 <body>
 
     <div class="app p-5">
+        <!--Title-->
         <div class="title">
             <h1><span style="color:#66FFFF">Feed</span>Block</h1>
             <h6 class="powerd-by ml-5 pl-5">&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; powered by ThinkBig!
             </h6>
 
         </div>
+        <!--Create or Enter Organization-->
         <div class="create-organization text-centre mt-5">
             <h1 class="m-5"> Create Your Organization</h1>
             <form class="text-capitalize p-2">
@@ -86,7 +92,7 @@
                 </div>
                 <!--Generate Key-->
                 <div class="form-group">
-                    <a href="#" class="have-my-link">I Have My Address</a>
+                    <a class="have-my-link" data-toggle="modal" data-target="#modal_address">I Have My Address</a>
                     <button type="button" onclick="return App.CreateOrganization()" class="btn btn-primary">Generate Key</button>
                 </div>
                 <!--Get & See Feedback Results-->
@@ -100,6 +106,63 @@
                 </div>
             </form>
         </div>
+        <!--Create Session-->
+        <div class="create-sessions" style="display:none">
+            <!--Start Form-->
+            <form class="text-capitalize p-2">
+
+                <!--Session Name-->
+                <div class="form-group">
+                    <label for="create_session_name">session name</label>
+                    <input type="text" required class="form-control" id="create_session_name">
+                </div>
+
+                <!--Discription-->
+                <div class="form-group">
+                    <label for="discription">discription</label>
+                    <input type="text" required class="form-control" id="discription">
+                </div>
+
+                <!--Session Start Date-->
+                <div class="form-group">
+                    <label for="start_date">start date</label>
+                    <input type="date" required class="form-control" id="start_date">
+                </div>
+
+                <!--Session End Date-->
+                <div class="form-group">
+                    <label for="end_date">end date</label>
+                    <input type="date" required class="form-control" id="end_date">
+                </div>
+
+                <!--Rate Time-->
+                <div class="form-group">
+                    <label for="time">how many days do you want to keep feedback?</label>
+                    <input type="number" min="0" required class="form-control" id="no-of-days">
+                </div>
+
+
+                <!--Lecturers names-->
+                <div class="form-group">
+                    <label for="lecturers">lecturers addresses (seperate them by comma ',')</label>
+                    <input type="text" class="form-control" required id="lecturers">
+                </div>
+
+                <!--attendes addresses-->
+                <div class="form-group">
+                    <label for="attendes">attendes addresses (seperate them by comma ',')</label>
+                    <input type="text" class="form-control" required id="attendes">
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="return App.onSubmit()" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <!--End Form-->
+        </div>
+        <!--/Create Session-->
+
 
     </div>
 
@@ -111,98 +174,37 @@
 
 
 
-    <!--Create Session-->
-    <div class="create-sessions" style="display:none">
 
-        <!-- Create Event Button -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createSession">
-            Create Events Form 
-        </button>
-
-        <!-- Create Event Modal -->
-        <div class="modal fade" id="createSession" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="createSessionCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        Create Event
-                    </div>
-                    <div class="modal-body">
-
-                        <!--Start Form-->
-                        <form class="text-capitalize p-2">
-
-                            <!--Session Name-->
-                            <div class="form-group">
-                                <label for="create_session_name">session name</label>
-                                <input type="text" required class="form-control" id="create_session_name">
-                            </div>
-
-                            <!--Discription-->
-                            <div class="form-group">
-                                <label for="discription">discription</label>
-                                <input type="text" required class="form-control" id="discription">
-                            </div>
-
-                            <!--Session Start Date-->
-                            <div class="form-group">
-                                <label for="start_date">start date</label>
-                                <input type="date" required class="form-control" id="start_date">
-                            </div>
-
-                            <!--Session End Date-->
-                            <div class="form-group">
-                                <label for="end_date">end date</label>
-                                <input type="date" required class="form-control" id="end_date">
-                            </div>
-
-                            <!--Rate Time-->
-                            <div class="form-group">
-                                <label for="time">how many days do you want to keep feedback?</label>
-                                <input type="number" min="0" required class="form-control" id="no-of-days">
-                            </div>
+    <!--MODALS-->
 
 
-                            <!--Lecturers names-->
-                            <div class="form-group">
-                                <label for="lecturers">lecturers addresses (seperate them by comma ',')</label>
-                                <input type="text" class="form-control" required id="lecturers">
-                            </div>
+    <!-- I Have My Address Link Modal -->
+    <!--See Result Modal -->
+    <div class="modal fade" id="modal_address" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Your Organization Key </div>
+                <div class="modal-body">
 
-                            <!--attendes addresses-->
-                            <div class="form-group">
-                                <label for="attendes">attendes addresses (seperate them by comma ',')</label>
-                                <input type="text" class="form-control" required id="attendes">
-                            </div>
-
-                            <div class="form-group">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" onclick="return App.onSubmit()" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                        <!--End Form-->
-                    </div>
+                    <!--Start Form-->
+                    <form class="text-capitalize p-2">
+                        <div class="form-group">
+                            <label for="create_Organization_Address">Organization Address</label>
+                            <input type="text" required class="form-control" id="create_Organization_Address">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="return App.GoToOrganization()" class="btn btn-primary">Go To My Organization</button>
+                        </div>
+                    </form>
+                    <!--End Form-->
                 </div>
             </div>
         </div>
     </div>
-    <!--/Create Session-->
+    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!--MODALS-->
 
     <!--See Result Modal -->
     <div class="modal fade" id="seeFeedback" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
@@ -297,6 +299,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
     <!-- TODO: Step 1: Include Fortmatic SDK Script -->
     <script src="https://cdn.jsdelivr.net/npm/fortmatic@latest/dist/fortmatic.js"></script>
+
+
     <!-- End Step 1 -->
     <script src="index.js"></script>
 </body>
