@@ -39,7 +39,7 @@ const App = {
         console.log(address);
         alert("Your Organization address = " + address.events.organizationCreated.returnValues.organizationAddress)
             //alert("Your Organization Address" + address.events.sessionnCreated.returnValues.sessionAddress);
-        $(".create-organization").remove();
+        $(".create-organization").css({ 'display': 'none' });
 
         $(".create-sessions").css({ 'display': 'block' });
     },
@@ -50,7 +50,7 @@ const App = {
         flag = await GoToOrganization(OrganizationAddress).call();
         console.log(flag);
         if (flag) {
-            $(".create-organization").remove();
+            $(".create-organization").css({ 'display': 'none' });
             $(".create-sessions").css({ 'display': 'block' });
         } else {
             alert("error");
@@ -64,6 +64,10 @@ const App = {
         console.log(contractAddress);
         alert("Your Session Address Is " + contractAddress.events.sessionnCreated.returnValues.sessionAddress);
 
+    },
+    BackBtn: function() {
+        $(".create-organization").css({ 'display': 'block' });
+        $(".create-sessions").css({ 'display': 'none' });
     },
 
     //Events Time
@@ -84,14 +88,12 @@ const App = {
 
         var end_date = this.parseDate($('#end_date').val());
         var end = (end_date.getTime()) / 1000;
-        var noOfDays = $('#no-of-days').val();
-        var nofDaysInSecond = noOfDays * 24 * 60 * 60;
 
         var lecturers = $('#lecturers').val().split(',');
 
         var attendes = $('#attendes').val().split(',');
 
-        this.createdSession(sessionName, discription, start, nofDaysInSecond + end, lecturers, attendes);
+        this.createdSession(sessionName, discription, start, end, lecturers, attendes);
 
 
     },
