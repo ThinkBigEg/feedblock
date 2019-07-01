@@ -6,13 +6,13 @@
 
     <!--Links-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css">
 </head>
 <style>
     .app {
         color: #fff;
         text-align: center;
-        background-color: #33ccff6b;
+        background-color: #00000096;
         height: -webkit-fill-available;
         height: -o-fill-availble;
         height: -moz-available;
@@ -64,9 +64,8 @@
     
     footer {
         text-align: center;
-        background-color: #66CCCC
-    }
-    
+        background-color: #000000ab
+        }    
     #modal_address .form-group input {}
     
     .clearfix {
@@ -272,9 +271,12 @@
 
                         <!--Rate-->
                         <div class="form-group">
-                            <label for="feedback">how much do you like us?</label> <br>
+                             <label for="feedback">how much do you like us?</label> <br>
                             <label for="feedback"> dislike </label> <input type="range" class="custom-range m-3" min="0" max="5" id="feedback"> <label for="feedback"> like  </label>
+ 
                         </div>
+                      
+                       
                         <div class="form-group">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="button" onclick="App.take_feedback()" id="feedback_btn" class="btn btn-primary">Submit</button>
@@ -297,7 +299,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
     <!-- TODO: Step 1: Include Fortmatic SDK Script -->
     <script src="https://cdn.jsdelivr.net/npm/fortmatic@latest/dist/fortmatic.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js"></script>
 
     <!-- End Step 1 -->
     <script src="index.js"></script>

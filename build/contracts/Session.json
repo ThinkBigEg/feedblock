@@ -5428,11 +5428,11 @@
       "events": {},
       "links": {},
       "address": "0xBD5065d05e8581fFc55fA794c416816EeE47Ba35",
-      "transactionHash": "0x7a2e31103f884f56deab1de1707be9555e90c6083f91592bfc5cb4ca9c37c62a"
+      "transactionHash": "0x96ba0423ab345bb7096d778210d4d98812f4e380c4da04cab666d1549c6caa11"
     }
   },
   "schemaVersion": "3.0.8",
-  "updatedAt": "2019-07-01T07:08:13.358Z",
+  "updatedAt": "2019-07-01T09:31:06.425Z",
   "devdoc": {
     "methods": {}
   },
