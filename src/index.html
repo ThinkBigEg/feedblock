@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Think-Big | Events creator Dapp</title>
+
+    <!--Links-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        .app {
+            color: #fff;
+            text-align: center;
+            background-color: #00000096;
+            height: -webkit-fill-available;
+            height: -o-fill-availble;
+            height: -moz-available;
+            width: fill-available
+        }
+        
+        .app .title {
+            color: #000;
+        }
+        
+        .app .title h1 {
+            font-size: 4.5rem;
+        }
+        
+        .app .title .powerd-by {
+            color: #fff;
+            font-size: 16px;
+            margin-top: -21px
+        }
+        
+        .app .create-organization form .form-group {}
+        
+        .app .create-organization form .form-group input {
+            width: 504px;
+            height: 46px;
+            margin: auto
+        }
+        
+        .app .create-organization form .form-group .have-my-link {
+            margin-right: 230px;
+            text-decoration: underline;
+            cursor: pointer;
+            color: #4181f6
+        }
+        
+        .app .create-organization form .session-btns button {
+            height: 73px;
+            margin-right: 56px;
+            margin-left: 51px
+        }
+        
+        .create-sessions {
+            text-align: left
+        }
+        
+        body>div.app.p-5>div.create-sessions>form>div.form-group.form-group-btn {
+            text-align: right
+        }
+        
+        footer {
+            text-align: center;
+            background-color: #000000ab
+        }
+        
+        #modal_address .form-group input {}
+        
+        .clearfix {
+            clear: both
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app p-5">
+        <!--Title-->
+        <div class="title">
+            <h1><span style="color:#66FFFF">Feed</span>Block</h1>
+            <h6 class="powerd-by ml-5 pl-5">&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; powered by ThinkBig!
+            </h6>
+
+        </div>
+        <!--Create or Enter Organization-->
+        <div class="create-organization text-centre mt-5">
+            <h1 class="m-5"> Create Your Organization</h1>
+            <form class="text-capitalize p-2">
+
+                <!--Organization Name-->
+                <div class="form-group">
+                    <input type="text" required class="form-control" id="create_Organization_name" placeholder="Organization Name">
+                </div>
+
+                <!--Organization Discription-->
+                <div class="form-group">
+                    <input type="text" required class="form-control" id="Organization_discription" placeholder="Organization Discription">
+                </div>
+                <!--Generate Key-->
+                <div class="form-group">
+                    <a class="have-my-link" data-toggle="modal" data-target="#modal_address">I Have My Address</a>
+                    <button type="button" onclick="return App.CreateOrganization()" class="btn btn-primary">Generate Key</button>
+                </div>
+                <!--Get & See Feedback Results-->
+                <div class="form-group session-btns">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#seeFeedback">
+                                Get Session Feedback <br> Results
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeFeedback">
+                        Give Your Feedback For <br>A Session                            
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!--Create Session-->
+        <div class="create-sessions" style="display:none">
+            <!--Start Form-->
+            <form class="text-capitalize p-2">
+                <h1>Add your Events/Session Info </h1>
+                <!--Session Name-->
+                <div class="form-group">
+                    <input type="text" required class="form-control" id="create_session_name" placeholder="Session Name">
+                </div>
+
+                <!--Discription-->
+                <div class="form-group">
+                    <input type="text" required class="form-control" id="discription" placeholder="discription">
+                </div>
+
+                <!--Session Start Date-->
+                <div class="form-group">
+                    <input type="date" required class="form-control" id="start_date" placeholder="Start Date">
+                </div>
+
+                <!--Session End Date-->
+                <div class="form-group">
+                    <input type="date" required class="form-control" id="end_date" placeholder="End Date">
+                </div>
+
+
+
+
+                <!--Lecturers names-->
+                <div class="form-group">
+                    <input type="text" class="form-control" required id="lecturers" placeholder="lecturers addresses (seperate them by comma ',')">
+                </div>
+
+                <!--attendes addresses-->
+                <div class="form-group">
+                    <input type="text" class="form-control" required id="attendes" placeholder="attendes addresses (seperate them by comma ',')">
+                </div>
+
+                <div class="form-group form-group-btn">
+                    <button type="button" onclick="return App.BackBtn()" class="btn btn-secondary">Back</button>
+                    <button type="button" onclick="return App.onSubmit()" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <!--End Form-->
+        </div>
+        <!--/Create Session-->
+
+
+    </div>
+
+    <footer>
+        &copy;Copyright <a href="http://www.think-big.solutions" target="tab">ThinkBig!</a> - All Rights Reserved
+    </footer>
+
+
+
+
+
+
+    <!--MODALS-->
+
+
+    <!-- I Have My Address Link Modal -->
+    <!--See Result Modal -->
+    <div class="modal fade" id="modal_address" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Your Organization Key </div>
+                <div class="modal-body">
+
+                    <!--Start Form-->
+                    <form class="text-capitalize p-2">
+                        <div class="form-group">
+                            <label for="create_Organization_Address">Organization Address</label>
+                            <input type="text" required class="form-control" id="create_Organization_Address">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="return App.GoToOrganization()" class="btn btn-primary">Go To My Organization</button>
+                        </div>
+                    </form>
+                    <!--End Form-->
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!--See Result Modal -->
+    <div class="modal fade" id="seeFeedback" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    See Result
+                </div>
+                <div class="modal-body">
+
+                    <!--Start Form-->
+                    <form class="text-capitalize p-2">
+
+                        <!--Session Name-->
+                        <div class="form-group">
+                            <label for="see_session_name">Session Address</label>
+                            <input type="text" class="form-control" required id="see_session_name">
+                        </div>
+                        <!--Submit button-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="App.showResult()" id="feedback_btn" class="btn btn-primary">Submit</button>
+                        </div>
+                        <!--Show Chart-->
+                        <div class="container">
+                            <div class="row py-2">
+                                <div class="col-md-12 py-1">
+                                    <div class="card" style="border:none">
+                                        <div class="card-body">
+                                            <canvas id="chDonut1"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    <!--End Form-->
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!--Give Feedback Modal-->
+    <!-- Make  Feedback Modal -->
+    <div class="modal fade" id="makeFeedback" tabindex="-1" role="dialog" style="background-color: #ffff" aria-labelledby="makeFeedbackCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Tell Us Your Opinion
+                </div>
+                <div class="modal-body">
+
+                    <!--Start Form-->
+                    <form class="text-capitalize p-2">
+
+                        <!--Session Name-->
+                        <div class="form-group">
+                            <label for="feedback_session_name">session address</label>
+                            <input type="text" class="form-control" required id="feedback_session_name">
+                        </div>
+                        <!--Session Name-->
+                        <div class="form-group">
+                            <label for="feedback_session_voter">voter address</label>
+                            <input type="text" class="form-control" required id="feedback_session_voter">
+                        </div>
+
+                        <!--Rate-->
+                        <div class="form-group">
+                            <label for="feedback">how much do you like us?</label> <br>
+                            <label for="feedback"> dislike </label> <input type="range" class="custom-range m-3" min="0" max="4" id="feedback"> <label for="feedback"> like  </label>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="App.take_feedback()" id="feedback_btn" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                    <!--End Form-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/MODALS-->
+
+
+
+
+    <!--Scripts-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/truffle-contract/dist/truffle-contract.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+    <!-- TODO: Step 1: Include Fortmatic SDK Script -->
+    <script src="https://cdn.jsdelivr.net/npm/fortmatic@latest/dist/fortmatic.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
