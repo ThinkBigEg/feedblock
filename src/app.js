@@ -68,11 +68,6 @@ App = {
         App.Organization = await App.contracts.Organization.deployed()
         App.Session = await App.contracts.Session.deployed()
     },
-    useAddress: async(contractName, address) => {
-        var contractABI = web3.eth.contract(App.ContractFactory.abi)
-        var contract = contractABI.at(address)
-        return contract
-    },
 
 
     CreateOrganization: async() => {
@@ -137,9 +132,71 @@ App = {
         var lecturers = $('#lecturers').val().split(',')
 
         var attendes = $('#attendes').val().split(',')
-
+        console.log("Attendess  " + attendes[1])
+        console.log("lecturers  " + lecturers[0])
         App.createSession(sessionName, discription, start, end, lecturers, attendes)
     },
+    //Take Feedback
+    take_feedback: async() => {
+        var _sessionName = $('#feedback_session_name').val()
+        var _voter = $('#feedback_session_voter').val()
+        var _feedback = $('#feedback').val()
+        var sessionflag = await App.Organization.checkForSession(_sessionName)
+        var gattendes = await App.Session.getattendes()
+        var glecturer = await App.Session.getattendes()
+
+        console.log(gattendes)
+        console.log(glecturer)
+
+        console.log(sessionflag + " yarab")
+        if (sessionflag) {
+            await App.Session.take_feedback(_voter, _feedback)
+        }
+    },
+    //See Result
+    getResult: async() => {
+        var _sessionName = $('#see_session_name').val()
+        var result
+        var sessionflag = await App.Organization.checkForSession(_sessionName)
+        console.log(sessionflag + " yarab")
+        if (sessionflag) {
+            result = await App.Session.seeResult()
+        }
+        console.log(result)
+        return result
+    },
+    drawChart: async(result) => {
+        console.log("see = " + result)
+        var numOfVoters = result[0] + result[1] + result[1] + result[3] + result[4]
+        var colors = ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d']
+        var donutOptions = {
+                cutoutPercentage: 85,
+                legend: { position: 'bottom', padding: 5, labels: { pointStyle: 'circle', usePointStyle: true } }
+            }
+            // donut 1
+        var chDonutData1 = {
+            labels: ['Bad', 'Normal', 'Good', 'Very Good', 'Excellent'],
+            datasets: [{
+                backgroundColor: colors.slice(0, 5),
+                borderWidth: 0,
+                data: [(result[0] / numOfVoters) * 100, (result[1] / numOfVoters) * 100, (result[2] / numOfVoters) * 100, (result[3] / numOfVoters) * 100, (result[4] / numOfVoters) * 100]
+            }]
+        }
+
+        var chDonut1 = document.getElementById("chDonut1")
+        if (chDonut1) {
+            new Chart(chDonut1, {
+                type: 'pie',
+                data: chDonutData1,
+                options: donutOptions
+            })
+        }
+    },
+    showResult: async() => {
+        App.getResult().then(function(data) {
+            App.drawChart(data)
+        })
+    }
 
 
 }

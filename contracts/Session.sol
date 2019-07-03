@@ -12,13 +12,14 @@ contract Session {
 
       uint8[5]  result; 
       mapping(address => uint8) public attendes_feedback; //institution boardMembers
-
-      modifier onTime(uint _startTime){
-            require(now < _startTime);
-            _;
-      }
-  
-      constructor (string memory _sessionName, string memory _description, uint _startTime,uint _endTime,address[] memory   _lecturer,address[] memory  _attendes,address _creator) public onTime(_startTime){
+      mapping(address => bool) public Isattendes;
+      mapping(address => bool) public Islecturer;
+      modifier onlyVoter(address _voter){
+              require(Isattendes[_voter]);
+              _;
+          }
+    
+      constructor (string memory _sessionName, string memory _description, uint _startTime,uint _endTime,address[] memory   _lecturer,address[] memory  _attendes,address _creator) public{
               
               sessionName =  _sessionName;
               description = _description;
@@ -27,34 +28,32 @@ contract Session {
               attendes = _attendes;
               lecturer = _lecturer;
               creator = _creator;
-              initAttendes(attendes);
+              init(_attendes,lecturer);
       } 
+      function getattendes() view public returns (address[] memory) {
+        return attendes;
+      }
+      function getlecturers() view public returns (address[] memory) {
+        return lecturer;
+      }
       
-    function initAttendes(address[] memory _attendes) private{
+    function init(address[] memory _attendes,address[] memory _lecturer) private{
            for(uint i=0 ; i < _attendes.length ; i++){
-            attendes_feedback[_attendes[i]] = 6;
+            Isattendes[_attendes[i]] = true;
         }
+          for (uint i =0; i < lecturer.length; i++) {
+            Islecturer[_lecturer[i]]  = true;
+          }
     }
    
-    function Time() public view returns (bool){
-       return (now >=  startTime  && now <= endTime && startTime < endTime);          
-     }
-
-    modifier checkTime(){
-        require(Time());
-        _;
-      }
-    modifier onlyVoter(address _voter){
-        require(attendes_feedback[_voter] != 0);
-        _;
-      }
-    function take_feedback(address _voter,uint8 _feedback)  public  onlyVoter(_voter) {
-           if (attendes_feedback[_voter] != 6) 
+   
+    function take_feedback(address _voter,uint8 _feedback)  public onlyVoter(_voter) {
+            if (attendes_feedback[_voter] != 0) 
            {
                 result[attendes_feedback[_voter]]  = result[attendes_feedback[_voter]] - 1;
            } 
            attendes_feedback[_voter] = _feedback; 
-           result[_feedback] = result[_feedback] + 1;          
+           result[_feedback] = result[_feedback] + 1;         
     }
      
   function seeResult() public view returns(uint8[5] memory){

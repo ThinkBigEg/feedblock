@@ -8,10 +8,9 @@ contract Organization {
     address creator;
     string organizationName;
     string organizationDiscription;
-    mapping (address => bool) ISsession;
     Session[] sessions;
-   
-   
+    mapping (address => bool) ISsession;
+
    constructor(string  memory _organizationName, string memory _organizationDiscription) public{
         organizationName = _organizationName;
         organizationDiscription = _organizationDiscription;
@@ -22,7 +21,9 @@ contract Organization {
         require(msg.sender == creator);
         _;
     } 
-  
+     function checkForSession(address _address) view public returns (bool) {
+        return ISsession[_address];
+     }
     
      //construct Session Contract
      function createSession(
