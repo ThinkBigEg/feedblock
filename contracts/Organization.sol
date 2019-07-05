@@ -34,7 +34,7 @@ contract Organization {
       address[] memory _lecturer,
       address[] memory _attendes,
       address _organizationAddress
-     ) public  onlyCreator returns(address) {
+     ) public   returns(address) {
         
          Session session = new Session(_sessionName , _description , _startTime , _endTime, _lecturer,_attendes,_organizationAddress );
         ISsession[address(session)] = true;

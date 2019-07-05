@@ -19,24 +19,18 @@ contract Session {
               _;
           }
     
-      constructor (string memory _sessionName, string memory _description, uint _startTime,uint _endTime,address[] memory   _lecturer,address[] memory  _attendes,address _creator) public{
+      constructor (string memory _sessionName, string memory _description, uint _startTime,uint _endTime,address[] memory _lecturer,address[] memory  _attendes,address _creator) public{
               
               sessionName =  _sessionName;
               description = _description;
               startTime = _startTime;
               endTime = _endTime;
-              attendes = _attendes;
               lecturer = _lecturer;
+              attendes = _attendes;
               creator = _creator;
-              init(_attendes,lecturer);
-      } 
-      function getattendes() view public returns (address[] memory) {
-        return attendes;
+              init(attendes,lecturer);
       }
-      function getlecturers() view public returns (address[] memory) {
-        return lecturer;
-      }
-      
+
     function init(address[] memory _attendes,address[] memory _lecturer) private{
            for(uint i=0 ; i < _attendes.length ; i++){
             Isattendes[_attendes[i]] = true;

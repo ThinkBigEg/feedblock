@@ -2,6 +2,7 @@ App = {
     loading: false,
     contracts: {},
     organizationAddress: '',
+    sessionAddress: '',
 
     load: async() => {
         await App.loadWeb3()
@@ -51,24 +52,38 @@ App = {
     loadContract: async() => {
         // Create a JavaScript version of the smart contract
         const mainContract = await $.getJSON('mainContract.json')
-        const Organization = await $.getJSON('Organization.json')
-        const Session = await $.getJSON('Session.json')
-
         App.contracts.mainContract = TruffleContract(mainContract)
         App.contracts.mainContract.setProvider(App.web3Provider)
 
-        App.contracts.Organization = TruffleContract(Organization)
-        App.contracts.Organization.setProvider(App.web3Provider)
-
-        App.contracts.Session = TruffleContract(Session)
-        App.contracts.Session.setProvider(App.web3Provider)
-
         // Hydrate the smart contract with values from the blockchain
         App.mainContract = await App.contracts.mainContract.deployed()
-        App.Organization = await App.contracts.Organization.deployed()
-        App.Session = await App.contracts.Session.deployed()
     },
+    loadorganizationContract: async(address, _sessionName, _discription, _start, _end, _lecturers, _attendes) => {
+        // Create a JavaScript version of the smart contract
+        const Organization = await $.getJSON('Organization.json')
+        console.log(Organization)
+        App.contracts.Organization = web3.eth.contract(Organization.abi).at(address);
 
+        console.log(App.contracts.Organization)
+        var session = await App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
+        console.log(session)
+            /*    App.contracts.Organization.setProvider(this.web3.currentProvider)
+
+               // Hydrate the smart contract with values from the blockchain
+               App.Organization = await App.contracts.Organization.deployed() */
+    },
+    createSessionPromise: (_sessionName, _discription, _start, _end, _lecturers, _attendes, address) => {
+        return new Promise(function(resolve, reject) {
+            App.contracts.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, address, function(error, response) {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(response);
+                    console.log("hnaa")
+                }
+            })
+        });
+    },
 
     CreateOrganization: async() => {
         // Load the total task count from the blockchain
@@ -76,9 +91,11 @@ App = {
         //const $taskTemplate = $('.taskTemplate')
         var OrganizationName = $('#create_Organization_name').val()
         var discription = $('#Organization_discription').val()
+
         var organization = await App.mainContract.CreateOrganization(OrganizationName, discription)
         console.log(organization.logs[0].args.organization)
-        alert("Your Organization Address " + organization.logs[0].args.organization)
+        console.log(organization.logs[0].args.creator)
+        alert(organization.logs[0].args.organization)
         App.organizationAddress = organization.logs[0].args.organization
         $(".create-organization").css({ 'display': 'none' })
 
@@ -113,9 +130,36 @@ App = {
     },
 
     createSession: async(_sessionName, _discription, _start, _end, _lecturers, _attendes) => {
-        var session = await App.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
-        console.log(session.logs[0].args.sessionAddress)
-        alert("Your Session Address " + session.logs[0].args.sessionAddress)
+
+        App.loadorganizationContract(App.organizationAddress, _sessionName, _discription, _start, _end, _lecturers, _attendes)
+            // console.log(session.logs[0].args.sessionAddress)
+            //alert("Your Session Address " + session.logs[0].args.sessionAddress)
+
+
+
+        //var session = await App.contracts.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
+
+
+        /*  $.getJSON('Organization.json', function(data) {
+            // Get the necessary contract artifact file and instantiate it with truffle-contract
+            var instance = web3.eth.contract(data.abi).at(App.organizationAddress);
+            //var instance = App.contracts.Institution;
+            App.contracts.Organization = instance;
+
+            console.log("Organization  address:", instance.address); //inspect element to see the console logs.
+            instance.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress, { from: App.account }, function(err, value) {
+                if (!err) {
+                    console.log("session address " + value)
+                    sessionAddress = value
+                } else {
+                    console.log("SHIT")
+                }
+            })
+        })
+ */
+
+
+
     },
     onSubmit: async() => {
         var sessionName = $('#create_session_name').val()
@@ -132,8 +176,7 @@ App = {
         var lecturers = $('#lecturers').val().split(',')
 
         var attendes = $('#attendes').val().split(',')
-        console.log("Attendess  " + attendes[1])
-        console.log("lecturers  " + lecturers[0])
+
         App.createSession(sessionName, discription, start, end, lecturers, attendes)
     },
     //Take Feedback
@@ -141,16 +184,19 @@ App = {
         var _sessionName = $('#feedback_session_name').val()
         var _voter = $('#feedback_session_voter').val()
         var _feedback = $('#feedback').val()
-        var sessionflag = await App.Organization.checkForSession(_sessionName)
-        var gattendes = await App.Session.getattendes()
-        var glecturer = await App.Session.getattendes()
-
-        console.log(gattendes)
-        console.log(glecturer)
+        var sessionflag
+        App.contracts.Organization.checkForSession(_sessionName, function(err, value) {
+                sessionflag = value
+            })
+            /*    var gattendes = await App.Session.getattendes()
+               var glecturer = await App.Session.getlecturers() */
+            /* 
+                    console.log(gattendes)
+                    console.log(glecturer) */
 
         console.log(sessionflag + " yarab")
         if (sessionflag) {
-            await App.Session.take_feedback(_voter, _feedback)
+
         }
     },
     //See Result
