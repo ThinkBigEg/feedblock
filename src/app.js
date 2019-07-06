@@ -58,67 +58,18 @@ App = {
         // Hydrate the smart contract with values from the blockchain
         App.mainContract = await App.contracts.mainContract.deployed()
     },
-    loadorganizationContract: async(address, _sessionName, _discription, _start, _end, _lecturers, _attendes) => {
-        // Create a JavaScript version of the smart contract
-        const Organization = await $.getJSON('Organization.json')
-        App.contracts.Organization = web3.eth.contract(Organization.abi).at(address)
-        console.log(App.contracts.Organization)
-        var sessionAddress = await App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
-        var sessionEvent = App.contracts.Organization.sessionnCreated()
-        sessionEvent.watch(function(error, result) {
-            if (!error) {
 
-                console.log(result)
-            } else {
-                console.log(error);
-            }
-        });
-        App.contracts.Organization.sessionnCreated({}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
-            if (error)
-                console.log('Error in myEvent event handler: ' + error);
-            else
-                console.log('myEvent: ' + JSON.stringify(eventResult));
-        });
-        const Session = await $.getJSON('Session.json')
-            /*   App.contracts.Session = web3.eth.contract(Session.abi).at(sessionAddress)
-              console.log(App.contracts.Session)
-              await App.takeSessionFeedbackPromise('0xa8ff46045fa2c6a0af361819b62126e1b0ec8909', 3) */
-    },
-    createSessionPromise: (_sessionName, _discription, _start, _end, _lecturers, _attendes, address) => {
-        return new Promise(function(resolve, reject) {
-            App.contracts.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, address, function(error, response) {
-                if (error) {
-                    reject(error)
-                } else {
-                    resolve(response)
-                }
-            })
-        });
-    },
-    takeSessionFeedbackPromise: (voterAddress, feedback) => {
-        return new Promise(function(resolve, reject) {
-            App.contracts.Session.take_feedback(voterAddress, feedback, function(error, response) {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(response);
-                    console.log("el7")
-                }
-            })
-        });
-    },
+
+
 
     CreateOrganization: async() => {
-        // Load the total task count from the blockchain
-        //const taskCount = await App.ContractFactory.taskCount()
-        //const $taskTemplate = $('.taskTemplate')
         var OrganizationName = $('#create_Organization_name').val()
         var discription = $('#Organization_discription').val()
 
         var organization = await App.mainContract.CreateOrganization(OrganizationName, discription)
         console.log(organization.logs[0].args.organization)
         console.log(organization.logs[0].args.creator)
-        alert(organization.logs[0].args.organization)
+        alert("Your Organization address" + organization.logs[0].args.organization)
         App.organizationAddress = organization.logs[0].args.organization
         $(".create-organization").css({ 'display': 'none' })
 
@@ -138,6 +89,18 @@ App = {
             alert("error")
         }
     },
+    checkForSessionPromise: (address) => {
+        return new Promise(function(resolve, reject) {
+            App.contracts.Organization.checkForSession(address, function(error, response) {
+                if (error) {
+                    reject(error)
+                } else {
+                    console.log(response)
+                    resolve(response)
+                }
+            })
+        });
+    },
     //Back Buttion 
     BackBtn: async() => {
         $(".create-organization").css({ 'display': 'block' })
@@ -153,36 +116,43 @@ App = {
     },
 
     createSession: async(_sessionName, _discription, _start, _end, _lecturers, _attendes) => {
+        const Organization = await $.getJSON('Organization.json')
+        console.log("organization address : " + App.organizationAddress)
+        App.contracts.Organization = web3.eth.contract(Organization.abi).at(App.organizationAddress)
+        await App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
+        if (confirm("Once Session is Created You Can't Change it are you sure?")) {
+            App.loadSessionContract()
 
-        App.loadorganizationContract(App.organizationAddress, _sessionName, _discription, _start, _end, _lecturers, _attendes)
-            // console.log(session.logs[0].args.sessionAddress)
-            //alert("Your Session Address " + session.logs[0].args.sessionAddress)
+        }
 
-
-
-        //var session = await App.contracts.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
-
-
-        /*  $.getJSON('Organization.json', function(data) {
-            // Get the necessary contract artifact file and instantiate it with truffle-contract
-            var instance = web3.eth.contract(data.abi).at(App.organizationAddress);
-            //var instance = App.contracts.Institution;
-            App.contracts.Organization = instance;
-
-            console.log("Organization  address:", instance.address); //inspect element to see the console logs.
-            instance.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress, { from: App.account }, function(err, value) {
-                if (!err) {
-                    console.log("session address " + value)
-                    sessionAddress = value
+    },
+    createSessionPromise: (_sessionName, _discription, _start, _end, _lecturers, _attendes, address) => {
+        return new Promise(function(resolve, reject) {
+            App.contracts.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, address, function(error, response) {
+                if (error) {
+                    reject(error)
                 } else {
-                    console.log("SHIT")
+                    console.log(response)
+                    resolve(response)
                 }
             })
-        })
- */
-
-
-
+        });
+    },
+    loadSessionContract: async() => {
+        // Create a JavaScript version of the smart contract
+        var sessionEvent = App.contracts.Organization.sessionnCreated()
+        sessionEvent.watch(function(error, result) {
+            if (!error) {
+                alert("Your Session Address = " + result.args.sessionAddress)
+                App.sessionAddress = result.args.sessionAddress
+                console.log(result)
+            } else {
+                console.log(error);
+            }
+        });
+        const Session = await $.getJSON('Session.json')
+        App.contracts.Session = web3.eth.contract(Session.abi).at(App.sessionAddress)
+        console.log("session Address : " + App.sessionAddress)
     },
     onSubmit: async() => {
         var sessionName = $('#create_session_name').val()
@@ -207,32 +177,50 @@ App = {
         var _sessionName = $('#feedback_session_name').val()
         var _voter = $('#feedback_session_voter').val()
         var _feedback = $('#feedback').val()
-        var sessionflag
-        App.contracts.Organization.checkForSession(_sessionName, function(err, value) {
-                sessionflag = value
-            })
-            /*    var gattendes = await App.Session.getattendes()
-               var glecturer = await App.Session.getlecturers() */
-            /* 
-                    console.log(gattendes)
-                    console.log(glecturer) */
-
+        var sessionflag = await App.checkForSessionPromise(_sessionName)
         console.log(sessionflag + " yarab")
         if (sessionflag) {
-
+            await App.takeSessionFeedbackPromise(_voter, _feedback)
         }
+    },
+
+    takeSessionFeedbackPromise: (voterAddress, feedback) => {
+        return new Promise(function(resolve, reject) {
+            App.contracts.Session.take_feedback(voterAddress, feedback, function(error, response) {
+                if (error) {
+                    console.log(error)
+                    reject(error);
+
+                } else {
+                    resolve(response);
+                    console.log("el7")
+                }
+            })
+        });
     },
     //See Result
     getResult: async() => {
         var _sessionName = $('#see_session_name').val()
         var result
-        var sessionflag = await App.Organization.checkForSession(_sessionName)
+        var sessionflag = await App.checkForSessionPromise(_sessionName)
         console.log(sessionflag + " yarab")
         if (sessionflag) {
-            result = await App.Session.seeResult()
+            result = await App.seeResultPromise()
         }
         console.log(result)
         return result
+    },
+    seeResultPromise: () => {
+        return new Promise(function(resolve, reject) {
+            App.contracts.Session.seeResult(function(error, response) {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(response);
+                    console.log("el7")
+                }
+            })
+        });
     },
     drawChart: async(result) => {
         console.log("see = " + result)
