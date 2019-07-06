@@ -2081,12 +2081,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xA51A6fC7A03420c70043349c5bb7772a42939a97",
-      "transactionHash": "0x34a3901730b8429fa06cde912ebea93f379be8064ae6856ec6046780641e2261"
+      "address": "0x0348De237F8380C7b67434157037AFd4e99BEf2d",
+      "transactionHash": "0xba547037b340d0ac240163628a36d37b47cea34e2aed5ca5611ddf2457fb48bd"
     }
   },
   "schemaVersion": "3.0.8",
-  "updatedAt": "2019-07-05T17:51:56.706Z",
+  "updatedAt": "2019-07-06T09:40:31.301Z",
   "devdoc": {
     "methods": {}
   },

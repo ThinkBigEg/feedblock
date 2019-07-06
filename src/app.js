@@ -61,25 +61,48 @@ App = {
     loadorganizationContract: async(address, _sessionName, _discription, _start, _end, _lecturers, _attendes) => {
         // Create a JavaScript version of the smart contract
         const Organization = await $.getJSON('Organization.json')
-        console.log(Organization)
-        App.contracts.Organization = web3.eth.contract(Organization.abi).at(address);
-
+        App.contracts.Organization = web3.eth.contract(Organization.abi).at(address)
         console.log(App.contracts.Organization)
-        var session = await App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
-        console.log(session)
-            /*    App.contracts.Organization.setProvider(this.web3.currentProvider)
+        var sessionAddress = await App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
+        var sessionEvent = App.contracts.Organization.sessionnCreated()
+        sessionEvent.watch(function(error, result) {
+            if (!error) {
 
-               // Hydrate the smart contract with values from the blockchain
-               App.Organization = await App.contracts.Organization.deployed() */
+                console.log(result)
+            } else {
+                console.log(error);
+            }
+        });
+        App.contracts.Organization.sessionnCreated({}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
+            if (error)
+                console.log('Error in myEvent event handler: ' + error);
+            else
+                console.log('myEvent: ' + JSON.stringify(eventResult));
+        });
+        const Session = await $.getJSON('Session.json')
+            /*   App.contracts.Session = web3.eth.contract(Session.abi).at(sessionAddress)
+              console.log(App.contracts.Session)
+              await App.takeSessionFeedbackPromise('0xa8ff46045fa2c6a0af361819b62126e1b0ec8909', 3) */
     },
     createSessionPromise: (_sessionName, _discription, _start, _end, _lecturers, _attendes, address) => {
         return new Promise(function(resolve, reject) {
             App.contracts.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, address, function(error, response) {
                 if (error) {
+                    reject(error)
+                } else {
+                    resolve(response)
+                }
+            })
+        });
+    },
+    takeSessionFeedbackPromise: (voterAddress, feedback) => {
+        return new Promise(function(resolve, reject) {
+            App.contracts.Session.take_feedback(voterAddress, feedback, function(error, response) {
+                if (error) {
                     reject(error);
                 } else {
                     resolve(response);
-                    console.log("hnaa")
+                    console.log("el7")
                 }
             })
         });
