@@ -1,4 +1,4 @@
-# HelloWorldBox
+# FeedBlock
 
 ## Installation
 
