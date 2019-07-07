@@ -172,9 +172,7 @@ App = {
 
         await App.createSession(sessionName, discription, start, end, lecturers, attendes)
         await App.loadSessionContract()
-            /*  setTimeout(function() {
-                     App.loadSessionContract()
-                 }, 2500) */
+
     },
     //Take Feedback
     take_feedback: async() => {
