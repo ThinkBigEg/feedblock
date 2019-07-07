@@ -69,7 +69,7 @@ App = {
         var organization = await App.mainContract.CreateOrganization(OrganizationName, discription)
         console.log(organization.logs[0].args.organization)
         console.log(organization.logs[0].args.creator)
-        alert("Your Organization address" + organization.logs[0].args.organization)
+        alert("Your Organization address " + organization.logs[0].args.organization)
         App.organizationAddress = organization.logs[0].args.organization
         $(".create-organization").css({ 'display': 'none' })
 
@@ -120,11 +120,6 @@ App = {
         console.log("organization address : " + App.organizationAddress)
         App.contracts.Organization = web3.eth.contract(Organization.abi).at(App.organizationAddress)
         await App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
-        if (confirm("Once Session is Created You Can't Change it are you sure?")) {
-            App.loadSessionContract()
-
-        }
-
     },
     createSessionPromise: (_sessionName, _discription, _start, _end, _lecturers, _attendes, address) => {
         return new Promise(function(resolve, reject) {
@@ -132,27 +127,32 @@ App = {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log(response)
                     resolve(response)
                 }
             })
         });
     },
     loadSessionContract: async() => {
-        // Create a JavaScript version of the smart contract
-        var sessionEvent = App.contracts.Organization.sessionnCreated()
-        sessionEvent.watch(function(error, result) {
-            if (!error) {
-                alert("Your Session Address = " + result.args.sessionAddress)
-                App.sessionAddress = result.args.sessionAddress
-                console.log(result)
-            } else {
-                console.log(error);
-            }
-        });
+
         const Session = await $.getJSON('Session.json')
-        App.contracts.Session = web3.eth.contract(Session.abi).at(App.sessionAddress)
-        console.log("session Address : " + App.sessionAddress)
+        return new Promise(function() {
+            setTimeout(function() {
+                var sessionEvent = App.contracts.Organization.sessionnCreated()
+                sessionEvent.watch(function(error, result) {
+                    if (!error) {
+                        alert("Your Session Address = " + result.args.sessionAddress)
+                        console.log(result)
+                        App.contracts.Session = web3.eth.contract(Session.abi).at(result.args.sessionAddress)
+                        App.sessionAddress = result.args.sessionAddress
+                        console.log("session Address : " + App.sessionAddress)
+
+                    } else {
+                        console.log(error);
+                    }
+                });
+            }, 2500)
+        })
+
     },
     onSubmit: async() => {
         var sessionName = $('#create_session_name').val()
@@ -170,15 +170,22 @@ App = {
 
         var attendes = $('#attendes').val().split(',')
 
-        App.createSession(sessionName, discription, start, end, lecturers, attendes)
+        await App.createSession(sessionName, discription, start, end, lecturers, attendes)
+        await App.loadSessionContract()
+            /*  setTimeout(function() {
+                     App.loadSessionContract()
+                 }, 2500) */
     },
     //Take Feedback
     take_feedback: async() => {
+        console.log("before feedback " + App.sessionAddress)
+        console.log(App.contracts.Session)
         var _sessionName = $('#feedback_session_name').val()
         var _voter = $('#feedback_session_voter').val()
-        var _feedback = $('#feedback').val()
+        var _feedback = $('#feedback').val() - 1
         var sessionflag = await App.checkForSessionPromise(_sessionName)
         console.log(sessionflag + " yarab")
+        console.log(_feedback)
         if (sessionflag) {
             await App.takeSessionFeedbackPromise(_voter, _feedback)
         }
