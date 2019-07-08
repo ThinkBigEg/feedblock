@@ -2,7 +2,6 @@ App = {
     loading: false,
     contracts: {},
     organizationAddress: '',
-    sessionAddress: '',
 
     load: async() => {
         await App.loadWeb3()
@@ -52,24 +51,39 @@ App = {
     loadContract: async() => {
         // Create a JavaScript version of the smart contract
         const mainContract = await $.getJSON('mainContract.json')
+        const Organization = await $.getJSON('Organization.json')
+        const Session = await $.getJSON('Session.json')
+
         App.contracts.mainContract = TruffleContract(mainContract)
         App.contracts.mainContract.setProvider(App.web3Provider)
 
+        App.contracts.Organization = TruffleContract(Organization)
+        App.contracts.Organization.setProvider(App.web3Provider)
+
+        App.contracts.Session = TruffleContract(Session)
+        App.contracts.Session.setProvider(App.web3Provider)
+
         // Hydrate the smart contract with values from the blockchain
         App.mainContract = await App.contracts.mainContract.deployed()
+        App.Organization = await App.contracts.Organization.deployed()
+        App.Session = await App.contracts.Session.deployed()
+    },
+    useAddress: async(contractName, address) => {
+        var contractABI = web3.eth.contract(App.ContractFactory.abi)
+        var contract = contractABI.at(address)
+        return contract
     },
 
 
-
-
     CreateOrganization: async() => {
+        // Load the total task count from the blockchain
+        //const taskCount = await App.ContractFactory.taskCount()
+        //const $taskTemplate = $('.taskTemplate')
         var OrganizationName = $('#create_Organization_name').val()
         var discription = $('#Organization_discription').val()
-
         var organization = await App.mainContract.CreateOrganization(OrganizationName, discription)
         console.log(organization.logs[0].args.organization)
-        console.log(organization.logs[0].args.creator)
-        alert("Your Organization address " + organization.logs[0].args.organization)
+        alert("Your Organization Address " + organization.logs[0].args.organization)
         App.organizationAddress = organization.logs[0].args.organization
         $(".create-organization").css({ 'display': 'none' })
 
@@ -89,18 +103,6 @@ App = {
             alert("error")
         }
     },
-    checkForSessionPromise: (address) => {
-        return new Promise(function(resolve, reject) {
-            App.contracts.Organization.checkForSession(address, function(error, response) {
-                if (error) {
-                    reject(error)
-                } else {
-                    console.log(response)
-                    resolve(response)
-                }
-            })
-        });
-    },
     //Back Buttion 
     BackBtn: async() => {
         $(".create-organization").css({ 'display': 'block' })
@@ -116,43 +118,9 @@ App = {
     },
 
     createSession: async(_sessionName, _discription, _start, _end, _lecturers, _attendes) => {
-        const Organization = await $.getJSON('Organization.json')
-        console.log("organization address : " + App.organizationAddress)
-        App.contracts.Organization = web3.eth.contract(Organization.abi).at(App.organizationAddress)
-        await App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
-    },
-    createSessionPromise: (_sessionName, _discription, _start, _end, _lecturers, _attendes, address) => {
-        return new Promise(function(resolve, reject) {
-            App.contracts.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, address, function(error, response) {
-                if (error) {
-                    reject(error)
-                } else {
-                    resolve(response)
-                }
-            })
-        });
-    },
-    loadSessionContract: async() => {
-
-        const Session = await $.getJSON('Session.json')
-        return new Promise(function() {
-            setTimeout(function() {
-                var sessionEvent = App.contracts.Organization.sessionnCreated()
-                sessionEvent.watch(function(error, result) {
-                    if (!error) {
-                        alert("Your Session Address = " + result.args.sessionAddress)
-                        console.log(result)
-                        App.contracts.Session = web3.eth.contract(Session.abi).at(result.args.sessionAddress)
-                        App.sessionAddress = result.args.sessionAddress
-                        console.log("session Address : " + App.sessionAddress)
-
-                    } else {
-                        console.log(error);
-                    }
-                });
-            }, 2500)
-        })
-
+        var session = await App.Organization.createSession(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
+        console.log(session.logs[0].args.sessionAddress)
+        alert("Your Session Address " + session.logs[0].args.sessionAddress)
     },
     onSubmit: async() => {
         var sessionName = $('#create_session_name').val()
@@ -170,95 +138,8 @@ App = {
 
         var attendes = $('#attendes').val().split(',')
 
-        await App.createSession(sessionName, discription, start, end, lecturers, attendes)
-        await App.loadSessionContract()
-
+        App.createSession(sessionName, discription, start, end, lecturers, attendes)
     },
-    //Take Feedback
-    take_feedback: async() => {
-        console.log("before feedback " + App.sessionAddress)
-        console.log(App.contracts.Session)
-        var _sessionName = $('#feedback_session_name').val()
-        var _voter = $('#feedback_session_voter').val()
-        var _feedback = $('#feedback').val() - 1
-        var sessionflag = await App.checkForSessionPromise(_sessionName)
-        console.log(sessionflag + " yarab")
-        console.log(_feedback)
-        if (sessionflag) {
-            await App.takeSessionFeedbackPromise(_voter, _feedback)
-        }
-    },
-
-    takeSessionFeedbackPromise: (voterAddress, feedback) => {
-        return new Promise(function(resolve, reject) {
-            App.contracts.Session.take_feedback(voterAddress, feedback, function(error, response) {
-                if (error) {
-                    console.log(error)
-                    reject(error);
-
-                } else {
-                    resolve(response);
-                    console.log("el7")
-                }
-            })
-        });
-    },
-    //See Result
-    getResult: async() => {
-        var _sessionName = $('#see_session_name').val()
-        var result
-        var sessionflag = await App.checkForSessionPromise(_sessionName)
-        console.log(sessionflag + " yarab")
-        if (sessionflag) {
-            result = await App.seeResultPromise()
-        }
-        console.log(result)
-        return result
-    },
-    seeResultPromise: () => {
-        return new Promise(function(resolve, reject) {
-            App.contracts.Session.seeResult(function(error, response) {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(response);
-                    console.log("el7")
-                }
-            })
-        });
-    },
-    drawChart: async(result) => {
-        console.log("see = " + result)
-        var numOfVoters = result[0] + result[1] + result[1] + result[3] + result[4]
-        var colors = ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d']
-        var donutOptions = {
-                cutoutPercentage: 85,
-                legend: { position: 'bottom', padding: 5, labels: { pointStyle: 'circle', usePointStyle: true } }
-            }
-            // donut 1
-        var chDonutData1 = {
-            labels: ['Bad', 'Normal', 'Good', 'Very Good', 'Excellent'],
-            datasets: [{
-                backgroundColor: colors.slice(0, 5),
-                borderWidth: 0,
-                data: [(result[0] / numOfVoters) * 100, (result[1] / numOfVoters) * 100, (result[2] / numOfVoters) * 100, (result[3] / numOfVoters) * 100, (result[4] / numOfVoters) * 100]
-            }]
-        }
-
-        var chDonut1 = document.getElementById("chDonut1")
-        if (chDonut1) {
-            new Chart(chDonut1, {
-                type: 'pie',
-                data: chDonutData1,
-                options: donutOptions
-            })
-        }
-    },
-    showResult: async() => {
-        App.getResult().then(function(data) {
-            App.drawChart(data)
-        })
-    }
 
 
 }

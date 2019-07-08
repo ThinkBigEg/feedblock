@@ -11,10 +11,10 @@ contract Organization {
     Session[] sessions;
     mapping (address => bool) ISsession;
 
-   constructor(string  memory _organizationName, string memory _organizationDiscription) public{
+   constructor(string  memory _organizationName, string memory _organizationDiscription, address _creator) public{
         organizationName = _organizationName;
         organizationDiscription = _organizationDiscription;
-        creator =  msg.sender;
+        creator =  _creator;
    }    
     event sessionnCreated(string name,address sessionAddress ,address creator);
     modifier onlyCreator(){
@@ -34,9 +34,9 @@ contract Organization {
       address[] memory _lecturer,
       address[] memory _attendes,
       address _organizationAddress
-     ) public   returns(address) {
+     ) public  onlyCreator returns(address) {
         
-         Session session = new Session(_sessionName , _description , _startTime , _endTime, _lecturer,_attendes,_organizationAddress );
+        Session session = new Session(_sessionName , _description , _startTime , _endTime, _lecturer,_attendes,_organizationAddress );
         ISsession[address(session)] = true;
         sessions.push(session);
         emit sessionnCreated(_sessionName,address(session),creator);

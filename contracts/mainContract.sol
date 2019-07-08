@@ -4,8 +4,9 @@ contract mainContract {
     event OrganizationCreated(address indexed organization, address creator);
     mapping (address => bool) ISorganizations;
     Organization[] organizations;
+   
     function CreateOrganization(string memory _organizationName,string memory _organizationDiscription) public returns (address) {
-        Organization organization = new Organization(_organizationName,_organizationDiscription);
+        Organization organization = new Organization(_organizationName,_organizationDiscription,msg.sender);
         emit OrganizationCreated(address(organization), msg.sender);
         ISorganizations[address(organization)] = true;
         organizations.push(organization);
