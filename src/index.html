@@ -20,39 +20,6 @@
     <![endif]-->
 
     <style>
-        /*LOADER*/
-        
-        @import url(https://fonts.googleapis.com/css?family=Josefin+Sans);
-        .loader {
-            font-weight: bold;
-            width: 500px;
-            margin: 0 auto;
-            height: 20px;
-            font-family: 'Josefin Sans', sans-serif;
-        }
-        
-        .title {
-            color: #CC0066;
-            font-size: 100%;
-            margin-bottom: 5px
-        }
-        
-        .load {
-            width: 100%;
-            height: 5px;
-            background-color: #F0F0F0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .bar {
-            width: 15%;
-            height: 5px;
-            background-color: #CC0066;
-            position: absolute;
-        }
-        /*LOADER*/
-        
         .app {
             color: #fff;
             text-align: center;
@@ -325,7 +292,7 @@
 
                         <div class="form-group">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" onclick="return App.take_feedback() " id="feedback_btn" class="btn btn-primary">Submit</button>
+                            <button type="button" onclick="App.take_feedback()" id="feedback_btn" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                     <!--End Form-->
