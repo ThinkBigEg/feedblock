@@ -119,7 +119,7 @@ App = {
         const Organization = await $.getJSON('Organization.json')
         console.log("organization address : " + App.organizationAddress)
         App.contracts.Organization = web3.eth.contract(Organization.abi).at(App.organizationAddress)
-        await App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
+        App.createSessionPromise(_sessionName, _discription, _start, _end, _lecturers, _attendes, App.organizationAddress)
     },
     createSessionPromise: (_sessionName, _discription, _start, _end, _lecturers, _attendes, address) => {
         return new Promise(function(resolve, reject) {
@@ -136,21 +136,20 @@ App = {
 
         const Session = await $.getJSON('Session.json')
         return new Promise(function() {
-            setTimeout(function() {
-                var sessionEvent = App.contracts.Organization.sessionnCreated()
-                sessionEvent.watch(function(error, result) {
-                    if (!error) {
-                        alert("Your Session Address = " + result.args.sessionAddress)
-                        console.log(result)
-                        App.contracts.Session = web3.eth.contract(Session.abi).at(result.args.sessionAddress)
-                        App.sessionAddress = result.args.sessionAddress
-                        console.log("session Address : " + App.sessionAddress)
 
-                    } else {
-                        console.log(error);
-                    }
-                });
-            }, 2500)
+            var sessionEvent = App.contracts.Organization.sessionnCreated()
+            sessionEvent.watch(function(error, result) {
+                if (!error) {
+                    alert("Your Session Address = " + result.args.sessionAddress)
+                    console.log(result)
+                    App.contracts.Session = web3.eth.contract(Session.abi).at(result.args.sessionAddress)
+                    App.sessionAddress = result.args.sessionAddress
+                    console.log("session Address : " + App.sessionAddress)
+
+                } else {
+                    console.log(error);
+                }
+            })
         })
 
     },
@@ -170,8 +169,8 @@ App = {
 
         var attendes = $('#attendes').val().split(',')
 
-        await App.createSession(sessionName, discription, start, end, lecturers, attendes)
-        await App.loadSessionContract()
+        App.createSession(sessionName, discription, start, end, lecturers, attendes)
+        App.loadSessionContract()
 
     },
     //Take Feedback
