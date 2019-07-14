@@ -178,7 +178,6 @@ App = {
         console.log("before feedback " + App.sessionAddress)
         console.log(App.contracts.Session)
         var _sessionName = $('#feedback_session_name').val()
-            //  var _voter = $('#feedback_session_voter').val()
         var _feedback = $('#feedback').val() - 1
         var sessionflag = await App.checkForSessionPromise(_sessionName)
         console.log(sessionflag + " yarab")
