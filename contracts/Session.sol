@@ -41,12 +41,12 @@ contract Session {
     }
    
    
-    function take_feedback(address _voter,uint8 _feedback)  public onlyVoter(_voter) {
-            if (attendes_feedback[_voter] != 0) 
+    function take_feedback(uint8 _feedback)  public onlyVoter(msg.sender) {
+            if (attendes_feedback[msg.sender] != 0) 
            {
-                result[attendes_feedback[_voter]]  = result[attendes_feedback[_voter]] - 1;
+                result[attendes_feedback[msg.sender]]  = result[attendes_feedback[msg.sender]] - 1;
            } 
-           attendes_feedback[_voter] = _feedback; 
+           attendes_feedback[msg.sender] = _feedback; 
            result[_feedback] = result[_feedback] + 1;         
     }
      
