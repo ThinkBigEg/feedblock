@@ -1,5 +1,5 @@
 // Session.deployed().then(function(instance){ return instance.take_feedback('0x0fce0e522a2a18ee1e0fbf913e12483aec3f8404',8);});
-pragma solidity 0.5.0;
+pragma solidity ^0.5.0;
 import "./Session.sol";
 
 

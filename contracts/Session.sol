@@ -1,4 +1,4 @@
-pragma solidity 0.5.0;
+pragma solidity ^0.5.0;
 contract Session {
 
       address public creator;  // The address of parent Organization

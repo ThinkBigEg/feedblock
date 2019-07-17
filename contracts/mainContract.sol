@@ -1,5 +1,5 @@
 import './Organization.sol';
-pragma solidity 0.5.0;
+pragma solidity ^0.5.0;
 contract mainContract {
     event OrganizationCreated(address indexed organization, address creator);
     mapping (address => bool) ISorganizations;
