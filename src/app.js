@@ -65,8 +65,10 @@ App = {
     CreateOrganization: async() => {
         var OrganizationName = $('#create_Organization_name').val()
         var discription = $('#Organization_discription').val()
+        var tokenName = $('#create_Token_name').val()
+        var tokenSymbol = $('#Token_symbol').val()
 
-        var organization = await App.mainContract.CreateOrganization(OrganizationName, discription)
+        var organization = await App.mainContract.CreateOrganization(OrganizationName, discription, tokenName, tokenSymbol)
         console.log(organization.logs[0].args.organization)
         console.log(organization.logs[0].args.creator)
         alert("Your Organization address " + organization.logs[0].args.organization)
@@ -183,13 +185,13 @@ App = {
         console.log(sessionflag + " yarab")
         console.log(_feedback)
         if (sessionflag) {
-            await App.takeSessionFeedbackPromise(_feedback)
+            await App.takeSessionFeedbackPromise(_feedback, App.organizationAddress)
         }
     },
 
-    takeSessionFeedbackPromise: (voterAddress, feedback) => {
+    takeSessionFeedbackPromise: (feedback, OrganizationAddress) => {
         return new Promise(function(resolve, reject) {
-            App.contracts.Session.take_feedback(voterAddress, feedback, function(error, response) {
+            App.contracts.Session.take_feedback(feedback, OrganizationAddress, function(error, response) {
                 if (error) {
                     console.log(error)
                     reject(error);
